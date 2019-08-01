@@ -5,7 +5,6 @@ export default function(props){
 
     let increase = () => {
         setCnt(cnt + 1);
-        setOther(Math.random());
     };
 
     return (

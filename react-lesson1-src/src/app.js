@@ -6,9 +6,9 @@ export default function(){
     return (
         <div>
             <h2>Counter as class</h2>
-            <CounterClass/>
-            <h2>Counter as function</h2>
-            <CounterFunction/>
+            <CounterClass min={0} max={10}/>
+            {/* <h2>Counter as function</h2>
+            <CounterFunction/> */}
         </div>
     );
 }
