@@ -45,8 +45,16 @@ export default class extends React.Component{
         this.setState({products: newProducts});
     }
 
+    deleteProduct(i){
+        let newProducts = [...this.state.products];
+        delete newProducts[i];
+        this.setState({products: newProducts});
+    }
+
     render(){
+        let productsCost = 0;
         let productsRows = this.state.products.map((product, i) => {
+            productsCost = productsCost + product.price * product.current
             return (
                 <tr key={product.id}>
                     <td>{product.title}</td>
@@ -59,6 +67,7 @@ export default class extends React.Component{
                         />
                     </td>
                     <td>{product.price * product.current}</td>
+                    <td><button onClick={() => this.deleteProduct(i)}>Delete</button></td>
                 </tr>
             );
         });
@@ -77,7 +86,7 @@ export default class extends React.Component{
                         {productsRows}
                     </tbody> 
                 </table>
-                
+                <span>Total cost: {productsCost}</span>
             </div>
         );
     }
