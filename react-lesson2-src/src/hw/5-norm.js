@@ -17,6 +17,14 @@ export default class extends React.Component{
         inputValue: this.props.cnt
     };
 
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.cnt !== this.props.cnt) {
+            this.setState({
+                inputValue: this.props.cnt
+            });
+        }
+    }
+
     increase = () => {
         this.set(this.props.cnt + 1);
     }

@@ -32,29 +32,35 @@ export default class extends React.Component{
                 rest: 8,
                 current: 1
             }
-        ]
+        ],
+        orderDone: false
     }
 
     changeCnt(i, cnt){
         // по смысле this.state.products[i].current = cnt;
 
-        let newProducts = [...this.state.products];
-        let newProduct = {...newProducts[i]};
-        newProduct.current = cnt;
-        newProducts[i] = newProduct;
-        this.setState({products: newProducts});
+        let products = [...this.state.products];
+        products[i] = {...products[i], current: cnt};
+        this.setState({products});
     }
 
     deleteProduct(i){
-        let newProducts = [...this.state.products];
-        delete newProducts[i];
-        this.setState({products: newProducts});
+        let products = [...this.state.products];
+        products.splice(i, 1);
+        this.setState({products});
+    }
+
+    sendForm = () => {
+        this.setState({
+            orderDone: true
+        });
     }
 
     render(){
-        let productsCost = 0;
+        let productsCost = this.state.products.reduce((t, pr) => {
+            return t + (pr.current * pr.price)
+        }, 0);
         let productsRows = this.state.products.map((product, i) => {
-            productsCost = productsCost + product.price * product.current
             return (
                 <tr key={product.id}>
                     <td>{product.title}</td>
@@ -74,20 +80,38 @@ export default class extends React.Component{
 
         return (
             <div>
-                <h2>Cart</h2>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>Title</td>
-                            <td>Price</td>
-                            <td>Count</td>
-                            <td>Total</td>
-                        </tr>
-                        {productsRows}
-                    </tbody> 
-                </table>
-                <span>Total cost: {productsCost}</span>
+                {this.state.orderDone ? showCongrats() : showForm(productsRows, productsCost, this.sendForm)}
             </div>
         );
     }
+}
+
+function showForm(productsRows, productsCost, onSend) {
+    return (
+        <div>
+            <h2>Cart</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Title</td>
+                        <td>Price</td>
+                        <td>Count</td>
+                        <td>Total</td>
+                    </tr>
+                    {productsRows}
+                </tbody> 
+            </table>
+            <span>Total cost: {productsCost}</span>
+            <button onClick={onSend}>Send</button>
+        </div>
+    );
+}
+
+function showCongrats() {
+    return (
+        <div>
+            <h2>Congratulations!</h2>
+            <p>Your order is in process.</p>
+        </div>
+    );
 }
